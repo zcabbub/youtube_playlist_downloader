@@ -18,6 +18,9 @@ enders = "https://www.youtube.com/playlist?list=PLnepKAkC61SPzdSjQ6hyssDqDQrnqTL
 beginners = "https://www.youtube.com/playlist?list=PLnepKAkC61SMIBWNxX9MDFlxqOQs6kSLN"
 overwhelming = "https://www.youtube.com/playlist?list=PLnepKAkC61SMRN7Y400TE4THcCtlEmJHX"
 relief = 'https://www.youtube.com/playlist?list=PLnepKAkC61SMXWuHNMUnhLCIKBD7FrNTM'
+acids = 'https://www.youtube.com/playlist?list=PLnepKAkC61SPsU1zdiq2nR0Ng9WPbnptd'
+archie = 'https://www.youtube.com/playlist?list=PLnepKAkC61SP4v4vy00mVNRtTWneghJ7X'
+classic = "https://www.youtube.com/playlist?list=PLnepKAkC61SNdDpvxTPjuBolH65U0sS2X"
 
 known = "https://www.youtube.com/playlist?list=PLnepKAkC61SO7vVPWJje4t1qWAVpI61uH"
 dnb = "https://www.youtube.com/playlist?list=PLnepKAkC61SME9-gfFLXfQmIuATBiFQ9e"
@@ -26,7 +29,7 @@ mid = 'https://www.youtube.com/playlist?list=PLnepKAkC61SN_b33sQGJBpdfuGIgVsjYp'
 min_chill = "https://www.youtube.com/playlist?list=PLnepKAkC61SPJaaKTY4hrqvdw_IuSGZOO"
 
 #sunny nu merge
-playlists = [beginners]
+playlists = [steppy, tribal, highers, supreme, sunny, weird, groovie, elrow, garage, enders, beginners, overwhelming, relief, mid, min_chill, acids, known, archie, classic]
 
 def convert(folder):
     print("Converting from mp4 to mp3...")
@@ -52,7 +55,7 @@ for url in playlists:
             try:
                 YouTube(song).streams.filter(only_audio=True).first().download(folder)
             except:
-                print("Error at '{song}' with link: {link}".format(song=song.title, link=song))
+                print("Error at '{song}' with link: {link} ; in {playlist}".format(song=song.title, link=song, playlist=folder))
         print("Downloading DONE.")
         convert(folder)
     except:
@@ -61,17 +64,22 @@ for url in playlists:
         differences=0
 
         for song in playlist:
-            song_yt = YouTube(song)
-            song_title = song_yt.title
-            if '.' in song_title:
-                song_title = song_title.replace('.', '')
-            song_name = song_title + ".mp3"
+            try:
+                song_yt = YouTube(song)
+                song_title = song_yt.title
+                if '.' in song_title:
+                    song_title = song_title.replace('.', '')
+                song_name = song_title + ".mp3"
 
-            if not os.path.exists(os.path.join(folder, song_name)):
-                song_yt.streams.filter(only_audio=True).first().download(folder)
-                differences = differences+1
+                if not os.path.exists(os.path.join(folder, song_name)):
+                    song_yt.streams.filter(only_audio=True).first().download(folder)
+                    differences = differences+1
+            except:
+                print("Error at '{song}' with link: {link} ; in {playlist}".format(song=song.title, link=song, playlist=folder))
 
         print("Downloaded {x} additional songs.".format(x=differences))
         convert(folder)
 
 print("Download successful")
+
+# TODO: create an interface; add update functionality;
